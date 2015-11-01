@@ -101,15 +101,13 @@ public class CsvActivity extends AppCompatActivity {
                 newLine[3] = "Z";
                 strExport.add(newLine);
 
-                isRecording = true;
-
-                btnRecord.setClickable(false);
-                btnRecord.setEnabled(false);
-                btnRecord.setText(R.string.recording);
-
                 new CountDownTimer(longTime, 1) {
 
                     public void onTick(long millisUntilFinished) {
+                        if(!isRecording){
+                            isRecording = true;
+                        }
+                        
                         long newTime = longTime - millisUntilFinished;
                         time = newTime + "";
                         txtOutputTime.setText("Timer: " + newTime + " ms");
@@ -133,6 +131,12 @@ public class CsvActivity extends AppCompatActivity {
                         }
                     }
                 }.start();
+
+
+
+                btnRecord.setClickable(false);
+                btnRecord.setEnabled(false);
+                btnRecord.setText(R.string.recording);
 
             }
         });
@@ -242,7 +246,7 @@ public class CsvActivity extends AppCompatActivity {
     public void writeCsv(List<String[]> values) throws IOException {
         String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
         String fileName = "Export.csv";
-        String filePath = baseDir + File.separator +"EMA_excercise"+File.separator + fileName;
+        String filePath = baseDir + File.separator + fileName;
        // File f = new File(filePath ); 
         CSVWriter writer = null;
         System.out.println("writeCsv " + filePath);
