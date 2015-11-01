@@ -1,29 +1,29 @@
 package de.bbg.ema_excercises;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CsvActivity extends AppCompatActivity {
 
@@ -33,6 +33,7 @@ public class CsvActivity extends AppCompatActivity {
     private TextView txtSensorX;
     private TextView txtSensorY;
     private TextView txtSensorZ;
+    private TextView txtOutputTime;
 
     private ProgressBar pbSensorXNeg;
     private ProgressBar pbSensorYNeg;
@@ -41,8 +42,17 @@ public class CsvActivity extends AppCompatActivity {
     private ProgressBar pbSensorYPos;
     private ProgressBar pbSensorZPos;
 
-    private Button btnPlay;
+    private Button btnRecord;
     private Button btnStop;
+
+
+    private String time = "";
+    private long longTime = 10000;
+
+    private Boolean isRecording = false;
+
+    Context context;
+    private List<String[]> strExport = new ArrayList<String[]>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +61,13 @@ public class CsvActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        System.out.print("onCreate");
+        System.out.println("onCreate");
 
-
+        context = this.getApplication();
         txtSensorX = (TextView)findViewById(R.id.txtSensorX);
         txtSensorY = (TextView)findViewById(R.id.txtSensorY);
         txtSensorZ = (TextView)findViewById(R.id.txtSensorZ);
+        txtOutputTime = (TextView)findViewById(R.id.txtOutputTime);
 
         pbSensorXPos = (ProgressBar)findViewById(R.id.pbSensorXPos);
         pbSensorYPos = (ProgressBar)findViewById(R.id.pbSensorYPos);
@@ -70,20 +81,62 @@ public class CsvActivity extends AppCompatActivity {
         pbSensorYNeg.setRotation(180);
         pbSensorZNeg.setRotation(180);
 
-        btnPlay = (Button)findViewById(R.id.btnPlay);
-        btnStop = (Button)findViewById(R.id.btnStop);
+        btnRecord = (Button)findViewById(R.id.btnRecord);
 
-        btnPlay.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+
+        btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    System.out.print("onCreate onClick");
-                    writeCsv();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("onCreate onClick");
+
+                String[] newLine = new String[4];
+
+                newLine[0] = "Time";
+                newLine[1] = "X";
+                newLine[2] = "Y";
+                newLine[3] = "Z";
+                strExport.add(newLine);
+
+                isRecording = true;
+
+                btnRecord.setClickable(false);
+                btnRecord.setEnabled(false);
+                btnRecord.setText(R.string.recording);
+
+                new CountDownTimer(longTime, 1) {
+
+                    public void onTick(long millisUntilFinished) {
+                        long newTime = longTime - millisUntilFinished;
+                        time = newTime + "";
+                        txtOutputTime.setText("Timer: " + newTime + " ms");
+                    }
+
+                    public void onFinish() {
+
+                        try {
+                            isRecording = false;
+                            writeCsv(strExport);
+                            btnRecord.setClickable(true);
+                            btnRecord.setEnabled(true);
+                            btnRecord.setText(R.string.record);
+
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(context,context.getString(R.string.csvCreated), duration);
+                            toast.show();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+
             }
         });
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -107,13 +160,32 @@ public class CsvActivity extends AppCompatActivity {
                 float sensorY = event.values[1];
                 float sensorZ = event.values[2];
 
-                txtSensorX.setText("X: "+sensorX+"");
+                if(isRecording) {
+                    String[] newLine = new String[4];
+
+
+                    if(time.equals("")) {
+                        newLine[0] = "0";
+                    }else{
+                        newLine[0] = time;
+                    }
+
+                    newLine[1] = sensorX+"";
+                    newLine[2] = sensorY+"";
+                    newLine[3] = sensorZ+"";
+                    strExport.add(newLine);
+                }
+
+                txtSensorX.setText("X: "+sensorX + "");
                 txtSensorY.setText("Y: "+sensorY + "");
                 txtSensorZ.setText("Z: "+sensorZ + "");
 
                 sensorX = multiTen(sensorX);
                 sensorY = multiTen(sensorY);
                 sensorZ = multiTen(sensorZ);
+
+
+
 
                 if(sensorX > 0) {
                     pbSensorXPos.setProgress(Math.round(sensorX));
@@ -161,38 +233,31 @@ public class CsvActivity extends AppCompatActivity {
         System.out.println("mSensor " + mSensor.toString());
         System.out.println("listener " + listener.toString());
 
-
-
-
-
-
     }
 
     public float multiTen(float val){
         return  val * 10;
     }
 
-    public void writeCsv() throws IOException {
+    public void writeCsv(List<String[]> values) throws IOException {
         String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
         String fileName = "Export.csv";
         String filePath = baseDir + File.separator +"EMA_excercise"+File.separator + fileName;
-       // File f = new File(filePath );
-
+       // File f = new File(filePath ); 
         CSVWriter writer = null;
-        System.out.print("writeCsv "+filePath);
+        System.out.println("writeCsv " + filePath);
         try
         {
-            writer = new CSVWriter(new FileWriter(filePath), ',');
-            String[] entries = "first#second#third".split("#"); // array of your values
-            writer.writeNext(entries);
+            writer = new CSVWriter(new FileWriter(filePath));
+            writer.writeAll(values);
             writer.close();
 
-            System.out.print("writeCsv try");
+            System.out.println("writeCsv try");
         }
         catch (IOException e)
         {
             //error
-            System.out.print("writeCsv catch "+e.toString());
+            System.out.println("writeCsv catch " + e.toString());
         }
 
     }
