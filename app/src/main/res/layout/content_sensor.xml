@@ -19,12 +19,31 @@
         android:text="@string/txtSensorX"
         android:id="@+id/txtSensorX" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pbSensorX"
-        android:layout_marginBottom="10dp"/>
+        android:weightSum="2">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/pbSensorXNeg"
+            android:layout_marginBottom="10dp"
+            android:max="10"
+            android:progressTint="@color/colorBlue"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/pbSensorXPos"
+            android:layout_marginBottom="10dp"
+            android:max="10" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,12 +51,31 @@
         android:text="@string/txtSensorY"
         android:id="@+id/txtSensorY" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pbSensorY"
-        android:layout_marginBottom="10dp" />
+        android:weightSum="2">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/pbSensorYNeg"
+            android:layout_marginBottom="10dp"
+            android:max="10"
+            android:progressTint="@color/colorBlue"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/pbSensorYPos"
+            android:layout_marginBottom="10dp"
+            android:max="10"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,11 +83,32 @@
         android:text="@string/txtSensorZ"
         android:id="@+id/txtSensorZ" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pbSensorZ"
-        android:layout_marginBottom="10dp" />
+        android:weightSum="2">
+
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/pbSensorZNeg"
+            android:layout_marginBottom="10dp"
+            android:max="10"
+            android:progressTint="@color/colorBlue"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/pbSensorZPos"
+            android:layout_marginBottom="10dp"
+            android:max="10" />
+    </LinearLayout>
+
 </LinearLayout>
 
