@@ -6,4 +6,5 @@
     <string name="txtSensorX">Sensor X</string>
     <string name="txtSensorY">Sensor Y</string>
     <string name="txtSensorZ">Sensor Z</string>
+    <string name="title_activity_csv">CsvActivity</string>
 </resources>
