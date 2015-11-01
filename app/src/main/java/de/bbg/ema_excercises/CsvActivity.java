@@ -107,7 +107,7 @@ public class CsvActivity extends AppCompatActivity {
                         if(!isRecording){
                             isRecording = true;
                         }
-                        
+
                         long newTime = longTime - millisUntilFinished;
                         time = newTime + "";
                         txtOutputTime.setText("Timer: " + newTime + " ms");
@@ -174,9 +174,9 @@ public class CsvActivity extends AppCompatActivity {
                         newLine[0] = time;
                     }
 
-                    newLine[1] = sensorX+"";
-                    newLine[2] = sensorY+"";
-                    newLine[3] = sensorZ+"";
+                    newLine[1] = parseFloat(sensorX);
+                    newLine[2] = parseFloat(sensorY);
+                    newLine[3] = parseFloat(sensorZ);
                     strExport.add(newLine);
                 }
 
@@ -243,6 +243,11 @@ public class CsvActivity extends AppCompatActivity {
         return  val * 10;
     }
 
+    public String parseFloat(float val){
+        String stringVal = val+"";
+        return stringVal.replace(".", ",");
+    }
+
     public void writeCsv(List<String[]> values) throws IOException {
         String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
         String fileName = "Export.csv";
@@ -250,9 +255,8 @@ public class CsvActivity extends AppCompatActivity {
        // File f = new File(filePath ); 
         CSVWriter writer = null;
         System.out.println("writeCsv " + filePath);
-        try
-        {
-            writer = new CSVWriter(new FileWriter(filePath));
+        try {
+            writer = new CSVWriter(new FileWriter(filePath), ';');
             writer.writeAll(values);
             writer.close();
 
