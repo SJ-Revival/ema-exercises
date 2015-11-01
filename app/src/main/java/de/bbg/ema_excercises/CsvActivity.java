@@ -1,18 +1,29 @@
 package de.bbg.ema_excercises;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.opencsv.CSVWriter;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class CsvActivity extends AppCompatActivity {
 
@@ -30,12 +41,17 @@ public class CsvActivity extends AppCompatActivity {
     private ProgressBar pbSensorYPos;
     private ProgressBar pbSensorZPos;
 
+    private Button btnPlay;
+    private Button btnStop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_csv);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        System.out.print("onCreate");
 
 
         txtSensorX = (TextView)findViewById(R.id.txtSensorX);
@@ -53,6 +69,21 @@ public class CsvActivity extends AppCompatActivity {
         pbSensorXNeg.setRotation(180);
         pbSensorYNeg.setRotation(180);
         pbSensorZNeg.setRotation(180);
+
+        btnPlay = (Button)findViewById(R.id.btnPlay);
+        btnStop = (Button)findViewById(R.id.btnStop);
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    System.out.print("onCreate onClick");
+                    writeCsv();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -139,6 +170,31 @@ public class CsvActivity extends AppCompatActivity {
 
     public float multiTen(float val){
         return  val * 10;
+    }
+
+    public void writeCsv() throws IOException {
+        String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        String fileName = "Export.csv";
+        String filePath = baseDir + File.separator +"EMA_excercise"+File.separator + fileName;
+       // File f = new File(filePath );
+
+        CSVWriter writer = null;
+        System.out.print("writeCsv "+filePath);
+        try
+        {
+            writer = new CSVWriter(new FileWriter(filePath), ',');
+            String[] entries = "first#second#third".split("#"); // array of your values
+            writer.writeNext(entries);
+            writer.close();
+
+            System.out.print("writeCsv try");
+        }
+        catch (IOException e)
+        {
+            //error
+            System.out.print("writeCsv catch "+e.toString());
+        }
+
     }
 
 }
