@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_sensor">SensorActivity</string>
     <string name="button_1">Aufgabe Sensoren</string>
+    <string name="txtSensorX">Sensor X</string>
+    <string name="txtSensorY">Sensor Y</string>
+    <string name="txtSensorZ">Sensor Z</string>
 </resources>
