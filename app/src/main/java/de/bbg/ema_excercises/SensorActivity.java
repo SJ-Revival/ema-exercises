@@ -25,9 +25,12 @@ public class SensorActivity extends AppCompatActivity {
     private TextView txtSensorY;
     private TextView txtSensorZ;
 
-    private ProgressBar pbSensorX;
-    private ProgressBar pbSensorY;
-    private ProgressBar pbSensorZ;
+    private ProgressBar pbSensorXNeg;
+    private ProgressBar pbSensorYNeg;
+    private ProgressBar pbSensorZNeg;
+    private ProgressBar pbSensorXPos;
+    private ProgressBar pbSensorYPos;
+    private ProgressBar pbSensorZPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +44,17 @@ public class SensorActivity extends AppCompatActivity {
         txtSensorY = (TextView)findViewById(R.id.txtSensorY);
         txtSensorZ = (TextView)findViewById(R.id.txtSensorZ);
 
-        pbSensorX = (ProgressBar)findViewById(R.id.pbSensorX);
-        pbSensorY = (ProgressBar)findViewById(R.id.pbSensorY);
-        pbSensorZ = (ProgressBar)findViewById(R.id.pbSensorZ);
+        pbSensorXPos = (ProgressBar)findViewById(R.id.pbSensorXPos);
+        pbSensorYPos = (ProgressBar)findViewById(R.id.pbSensorYPos);
+        pbSensorZPos = (ProgressBar)findViewById(R.id.pbSensorZPos);
+
+        pbSensorXNeg = (ProgressBar)findViewById(R.id.pbSensorXNeg);
+        pbSensorYNeg = (ProgressBar)findViewById(R.id.pbSensorYNeg);
+        pbSensorZNeg = (ProgressBar)findViewById(R.id.pbSensorZNeg);
+
+        pbSensorXNeg.setRotation(180);
+        pbSensorYNeg.setRotation(180);
+        pbSensorZNeg.setRotation(180);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -67,13 +78,41 @@ public class SensorActivity extends AppCompatActivity {
                 float sensorY = event.values[1];
                 float sensorZ = event.values[2];
 
-                txtSensorX.setText(sensorX+"");
-                txtSensorY.setText(sensorY + "");
-                txtSensorZ.setText(sensorZ + "");
+                txtSensorX.setText("X: "+sensorX+"");
+                txtSensorY.setText("Y: "+sensorY + "");
+                txtSensorZ.setText("Z: "+sensorZ + "");
 
-                pbSensorX.setProgress(Math.round(sensorX));
-                pbSensorY.setProgress(Math.round(sensorY));
-                pbSensorZ.setProgress(Math.round(sensorZ));
+                sensorX = multiTen(sensorX);
+                sensorY = multiTen(sensorY);
+                sensorZ = multiTen(sensorZ);
+
+                if(sensorX > 0) {
+                    pbSensorXPos.setProgress(Math.round(sensorX));
+                    pbSensorXNeg.setProgress(0);
+                }
+                else{
+                    pbSensorXNeg.setProgress(Math.round(sensorX) * -1);
+                    pbSensorXPos.setProgress(0);
+                }
+
+                if(sensorY > 0) {
+                    pbSensorYPos.setProgress(Math.round(sensorY));
+                    pbSensorYNeg.setProgress(0);
+                }
+                else{
+                    pbSensorYNeg.setProgress(Math.round(sensorY) * -1);
+                    pbSensorYPos.setProgress(0);
+                }
+
+                if(sensorZ > 0) {
+                    pbSensorZPos.setProgress(Math.round(sensorZ));
+                    pbSensorZNeg.setProgress(0);
+                }
+                else{
+                    pbSensorZNeg.setProgress(Math.round(sensorZ) * -1);
+                    pbSensorZPos.setProgress(0);
+                }
+
 
                 //System.out.println("onSensorChanged TYPE_ACCELEROMETER 0:" +event.values[0] +" 1:"+ event.values[1]+" 2:"+event.values[2]);
             }
@@ -98,6 +137,10 @@ public class SensorActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public float multiTen(float val){
+        return  val * 10;
     }
 
 }

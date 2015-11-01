@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/pbSensorXNeg"
             android:layout_marginBottom="10dp"
-            android:max="10"
+            android:max="100"
             android:progressTint="@color/colorBlue"/>
 
         <ProgressBar
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/pbSensorXPos"
             android:layout_marginBottom="10dp"
-            android:max="10" />
+            android:max="100" />
     </LinearLayout>
 
     <TextView
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/pbSensorYNeg"
             android:layout_marginBottom="10dp"
-            android:max="10"
+            android:max="100"
             android:progressTint="@color/colorBlue"/>
 
         <ProgressBar
@@ -73,7 +73,7 @@
             android:layout_weight="1"
             android:id="@+id/pbSensorYPos"
             android:layout_marginBottom="10dp"
-            android:max="10"
+            android:max="100"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/pbSensorZNeg"
             android:layout_marginBottom="10dp"
-            android:max="10"
+            android:max="100"
             android:progressTint="@color/colorBlue"/>
 
         <ProgressBar
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/pbSensorZPos"
             android:layout_marginBottom="10dp"
-            android:max="10" />
+            android:max="100" />
     </LinearLayout>
 
 </LinearLayout>
