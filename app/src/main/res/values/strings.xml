@@ -7,4 +7,6 @@
     <string name="txtSensorY">Sensor Y</string>
     <string name="txtSensorZ">Sensor Z</string>
     <string name="title_activity_csv">CsvActivity</string>
+    <string name="stop">Stop</string>
+    <string name="play">Play</string>
 </resources>
